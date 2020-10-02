@@ -159,13 +159,13 @@ function localizationInfo() {
 
 function localizationInfo_DE() {    
    @{
-        Culture = New-Object system.globalization.cultureinfo(“de-DE”)
+        Culture = New-Object system.globalization.cultureinfo("de-DE")
         DateFormat = "ddd dd MMM yyyy HH:mm:ss zzzz"
     }
 }
 function localizationInfo_EN() {
     @{
-        Culture = New-Object system.globalization.cultureinfo(“en-GB”)
+        Culture = New-Object system.globalization.cultureinfo("en-GB")
         DateFormat = "ddd, dd MMM yyyy HH:mm:ss zzzz"
     }
 }
