@@ -33,9 +33,11 @@ Invoke-WebRequest -Uri $url -OutFile $runScript
 
 
 #Im Autostart ablegen
-$batchContent = "powershell -File `"$($runScript)`" -ExecutionPolicy ByPass"
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+$batchContent = "@ECHO OFF`r`nchcp 65001`r`npowershell -File `"$($runScript)`" -ExecutionPolicy ByPass"
 $startupFolder = Join-Path $rootFolder "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
-Set-Content -Path (Join-Path $startupFolder 'RssFeed-Run.bat') -Value $batchContent
+$outfile = (Join-Path $startupFolder 'RssFeed-Run.bat')
+[System.IO.File]::WriteAllLines($outfile, $batchContent, $Utf8NoBomEncoding)
 
 
 Write-Host "Ersteinrichtung abgeschlossen"
