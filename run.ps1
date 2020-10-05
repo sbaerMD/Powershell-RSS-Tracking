@@ -26,6 +26,8 @@ function main() {
         } 
         else {
             $NoNewsIn += $_.Name
+            $state = date2string(getdate)
+            setStateFor $stateFolder $_.Name $state
         }       
     }
 
@@ -102,7 +104,7 @@ function getStateFor($stateFolder, $feedName) {
         $content = Get-Content $stateFile
         string2date $content
     } else {
-        getNullDate        
+        $null        
     }    
 }
 function setStateFor($stateFolder, $feedName, $state) {
@@ -115,7 +117,7 @@ function setStateFor($stateFolder, $feedName, $state) {
 function getLastRssItem($url, $credentials) {
     
     $lastTitle = ''
-    $lastDateValue = getNullDate
+    $lastDateValue = $null
     Write-Host "Prüfe '$($url)'"
     
     Invoke-RestMethod -Uri $url -Credential $credentials | foreach {
