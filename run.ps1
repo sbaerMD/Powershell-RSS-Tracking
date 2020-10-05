@@ -47,7 +47,7 @@ function main() {
         $content += "keine Neuigkeiten in folgenden RSS-Feeds:`r`n"
         $content += "-----------------------------------------`r`n"
         $NoNewsIn | foreach {
-            $content += "$($_),"
+            $content += "$($_), "
         }        
     }
 
@@ -116,8 +116,9 @@ function getLastRssItem($url, $credentials) {
     
     $lastTitle = ''
     $lastDateValue = getNullDate
+    Write-Host "Prüfe '$($url)'"
     
-    $content = Invoke-RestMethod -Uri $url -Credential $cred | foreach {
+    Invoke-RestMethod -Uri $url -Credential $credentials | foreach {
         $dateString = $_.PubDate  
         #$_.Title      
         $dateValue = string2date $dateString
@@ -171,3 +172,5 @@ function localizationInfo_EN() {
 }
 
 main
+
+
