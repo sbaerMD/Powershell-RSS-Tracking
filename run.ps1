@@ -1,5 +1,6 @@
 ﻿cls
 $RSS_DateFormat = 'de' #'de' oder 'en'
+$verbose = '0'
 
 function main() {
     $folderName = 'PowershellRssReader'
@@ -61,6 +62,12 @@ function main() {
     Remove-Item $file -Force -ErrorAction Ignore
 }
 
+function logVerbose($message) {
+    if($verbose -eq '1') {
+        Write-Host $message
+    }
+}
+
 function checkInitialization($folder) {
     if( -not(Test-Path $folder)) {
         Write-Host "!!Abbruch!!`nBitte zuerst die Ersteinrichtung für diesen Nuter-Account durchführen!"
@@ -102,9 +109,11 @@ function getStateFor($stateFolder, $feedName) {
     $stateFile = Join-Path $stateFolder "$($feedName)-state.txt" 
     if(Test-Path $stateFile) {
         $content = Get-Content $stateFile
+        logVerbose "Zustand von $($feedName) war '$($content)'"
         string2date $content
     } else {
-        $null        
+        $null
+        logVerbose "Zustand von $($feedName) war nicht ermittelbar, da die Speicherdatei (noch) nicht angelegt war."        
     }    
 }
 function setStateFor($stateFolder, $feedName, $state) {
@@ -142,10 +151,16 @@ function getNullDate {
 
 function string2date($dateString) {
     $loc = localizationInfo
-    [datetime]::ParseExact($dateString, $loc.DateFormat, $loc.Culture)
+    try {
+        [datetime]::ParseExact($dateString, $loc.DateFormat, $loc.Culture)
+     }
+     catch {
+        logVerbose "es ist ein Fehler bei der Umwandelung von '$($dateString)' in ein Datum mittels des Formates '$($loc.DateFormat)' aufgetreten, bitte prüfen!"  
+        $null
+    }
 }
 function date2string($date) {
-    $loc = localizationInfo 
+    $loc = localizationInfo
     $date.ToString($loc.DateFormat, $loc.Culture)
 }
 
