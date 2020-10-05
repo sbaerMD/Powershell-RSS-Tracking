@@ -26,7 +26,7 @@ function main() {
         } 
         else {
             $NoNewsIn += $_.Name
-            $state = date2string(getdate)
+            $state = date2string(get-date)
             setStateFor $stateFolder $_.Name $state
         }       
     }
